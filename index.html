@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dev Trivia - Quiz sur le Code</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Effet étincelles dans le background -->
+    <div class="sparkles-container" id="sparkles"></div>
+    
+    <!-- Contrôles en haut à droite -->
+    <div class="top-controls">
+        <!-- Toggle Mode Clair/Sombre -->
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Changer de thème">
+            <span class="theme-icon">🌙</span>
+        </button>
+        
+        <!-- Toggle Son -->
+        <button class="sound-toggle" onclick="toggleSound()" aria-label="Activer/Désactiver le son">
+            <span class="sound-icon">🔊</span>
+        </button>
+    </div>
+
+    <!-- Écran de démarrage -->
+    <div id="start-screen" class="screen active">
+        <div class="container">
+            <header class="quiz-header">
+                <div class="logo">💻</div>
+                <h1>Dev Trivia</h1>
+                <p class="subtitle">Quiz sur le Code - Révision Technique</p>
+            </header>
+
+            <div class="welcome-content">
+                <div class="info-card">
+                    <h2>Bienvenue !</h2>
+                    <p>Testez vos connaissances en développement avec ce quiz de 20 questions.</p>
+                    
+                    <div class="quiz-info">
+                        <div class="info-item">
+                            <span class="info-icon">📝</span>
+                            <span>20 questions</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-icon">⏱️</span>
+                            <span>15 secondes par question</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-icon">🎯</span>
+                            <span>Score en temps réel</span>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary btn-large" onclick="startQuiz()">
+                        Commencer le Quiz
+                    </button>
+                </div>
+            </div>
+
+            <footer class="start-footer">
+                <p>Projet de vacances L1 - Juillet 2026</p>
+                <p>Encadrant : Duvalier (Drakenarf)</p>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Écran du Quiz -->
+    <div id="quiz-screen" class="screen">
+        <div class="container">
+            <div class="quiz-header-bar">
+                <div class="theme-badge">💻 Dev Trivia</div>
+                <button class="btn btn-secondary btn-small" onclick="quitQuiz()">Quitter</button>
+            </div>
+
+            <!-- Barre de progression -->
+            <div class="progress-container">
+                <div class="progress-info">
+                    <span id="question-counter">Question 1/20</span>
+                    <div class="timer-circle">
+                        <svg class="timer-svg" viewBox="0 0 100 100">
+                            <circle class="timer-bg" cx="50" cy="50" r="45"></circle>
+                            <circle class="timer-progress" id="timer-progress" cx="50" cy="50" r="45"></circle>
+                        </svg>
+                        <span id="timer" class="timer-text">15</span>
+                    </div>
+                </div>
+                <div class="progress-bar">
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
+            </div>
+
+            <!-- Question -->
+            <div class="question-container">
+                <h2 id="question-text" class="question-text"></h2>
+                
+                <div id="options-container" class="options-container">
+                    <!-- Les options seront générées dynamiquement -->
+                </div>
+
+                <div id="feedback" class="feedback hidden">
+                    <p id="feedback-text"></p>
+                </div>
+            </div>
+
+            <!-- Score actuel -->
+            <div class="current-score">
+                <span>Score : <strong id="current-score">0</strong> / <span id="total-questions">15</span></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Écran de résultats -->
+    <div id="results-screen" class="screen">
+        <div class="container">
+            <div class="results-container">
+                <div class="results-header">
+                    <div class="results-icon" id="results-icon">🎉</div>
+                    <h1>Quiz Terminé !</h1>
+                    <div class="theme-badge">💻 Dev Trivia</div>
+                </div>
+
+                <div class="score-display">
+                    <div class="final-score">
+                        <span class="score-label">Votre Score</span>
+                        <span class="score-value" id="final-score">0/15</span>
+                        <span class="score-percentage" id="score-percentage">0%</span>
+                    </div>
+                </div>
+
+                <div id="performance-message" class="performance-message"></div>
+
+                <div class="results-stats">
+                    <div class="stat-item">
+                        <span class="stat-icon">✅</span>
+                        <span class="stat-label">Bonnes réponses</span>
+                        <span class="stat-value" id="correct-answers">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">❌</span>
+                        <span class="stat-label">Mauvaises réponses</span>
+                        <span class="stat-value" id="wrong-answers">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">⏱️</span>
+                        <span class="stat-label">Temps total</span>
+                        <span class="stat-value" id="total-time">0s</span>
+                    </div>
+                </div>
+
+                <div class="results-actions">
+                    <button class="btn btn-primary" onclick="restartQuiz()">
+                        🔄 Recommencer
+                    </button>
+                    <button class="btn btn-secondary" onclick="backToHome()">
+                        🏠 Retour à l'accueil
+                    </button>
+                </div>
+
+                <div class="share-section">
+                    <p>Partagez votre score !</p>
+                    <div class="share-text" id="share-text"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="questions.js"></script>
+    <script src="quiz.js"></script>
+</body>
+</html>
