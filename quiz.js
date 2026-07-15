@@ -20,7 +20,7 @@ const i18n = {
     fr: {
         subtitle:      'Quiz sur le Code - Révision Technique',
         welcome:       'Bienvenue !',
-        welcomeDesc:   'Testez vos connaissances en développement avec ce quiz de 20 questions.',
+        welcomeDesc:   'Testez vos connaissances en développement avec ce quiz de 15 questions.',
         infoQuestions: '15 questions',
         infoTimer:     '15 secondes par question',
         infoScore:     'Score en temps réel',
@@ -51,7 +51,7 @@ const i18n = {
     en: {
         subtitle:      'Code Quiz - Technical Review',
         welcome:       'Welcome!',
-        welcomeDesc:   'Test your development knowledge with this 20-question quiz.',
+        welcomeDesc:   'Test your development knowledge with this 15-question quiz.',
         infoQuestions: '15 questions',
         infoTimer:     '15 seconds per question',
         infoScore:     'Real-time score',
