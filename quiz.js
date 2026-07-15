@@ -20,8 +20,8 @@ const i18n = {
     fr: {
         subtitle:      'Quiz sur le Code - Révision Technique',
         welcome:       'Bienvenue !',
-        welcomeDesc:   'Testez vos connaissances en développement avec ce quiz de 15 questions.',
-        infoQuestions: '15 questions',
+        welcomeDesc:   'Testez vos connaissances en développement avec ce quiz de 20 questions.',
+        infoQuestions: '20 questions',
         infoTimer:     '15 secondes par question',
         infoScore:     'Score en temps réel',
         startBtn:      'Commencer le Quiz',
@@ -51,8 +51,8 @@ const i18n = {
     en: {
         subtitle:      'Code Quiz - Technical Review',
         welcome:       'Welcome!',
-        welcomeDesc:   'Test your development knowledge with this 15-question quiz.',
-        infoQuestions: '15 questions',
+        welcomeDesc:   'Test your development knowledge with this 20-question quiz.',
+        infoQuestions: '20 questions',
         infoTimer:     '15 seconds per question',
         infoScore:     'Real-time score',
         startBtn:      'Start Quiz',
@@ -112,7 +112,12 @@ const questionsEN = [
     { question: "In CSS, which property changes the display order of flex items?", options: ["flex-order", "order", "z-index", "position"], answer: 1 },
     { question: "Which keyword creates a class in JavaScript ES6?", options: ["function", "class", "object", "constructor"], answer: 1 },
     { question: "Which CSS property makes an element invisible but keeps its space?", options: ["display: none", "visibility: hidden", "opacity: 0", "hidden: true"], answer: 1 },
-    { question: "In JavaScript, which method converts an array to a string?", options: ["toString()", "join()", "concat()", "stringify()"], answer: 1 }
+    { question: "In JavaScript, which method converts an array to a string?", options: ["toString()", "join()", "concat()", "stringify()"], answer: 1 },
+    { question: "What is the DOM in JavaScript?", options: ["Document Object Model", "Data Object Management", "Dynamic Object Mapping", "Document Output Module"], answer: 0 },
+    { question: "Which JavaScript method selects an HTML element by its id?", options: ["querySelector()", "getElementById()", "getElement()", "selectById()"], answer: 1 },
+    { question: "In CSS, which 'display' value enables the flexible box model?", options: ["block", "inline", "flex", "grid"], answer: 2 },
+    { question: "Which Git command saves changes to the history?", options: ["git save", "git commit", "git push", "git store"], answer: 1 },
+    { question: "In JavaScript, which block is used to handle errors?", options: ["if...else", "try...catch", "for...of", "switch...case"], answer: 1 }
 ];
 
 function t(key) {
@@ -173,8 +178,8 @@ function startQuiz() {
     userAnswers = [];
     quizStartTime = Date.now();
     
-    // Sélectionner 15 questions aléatoires dans la langue active
-    selectedQuestions = getRandomQuestions(15);
+    // Sélectionner 20 questions aléatoires dans la langue active
+    selectedQuestions = getRandomQuestions(20);
     
     // Mettre à jour l'affichage
     totalQuestionsElement.textContent = selectedQuestions.length;
@@ -660,7 +665,7 @@ function toggleLang() {
         score = 0;
         userAnswers = [];
         quizStartTime = Date.now();
-        selectedQuestions = getRandomQuestions(15);
+        selectedQuestions = getRandomQuestions(20);
         currentScoreElement.textContent = score;
         totalQuestionsElement.textContent = selectedQuestions.length;
         loadQuestion();

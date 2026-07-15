@@ -173,5 +173,35 @@ const questions = [
         question: "En JavaScript, quelle méthode transforme un tableau en chaîne de caractères ?",
         options: ["toString()", "join()", "concat()", "stringify()"],
         answer: 1
+    },
+    {
+        question: "Qu'est-ce que le DOM en JavaScript ?",
+        options: [
+            "Document Object Model",
+            "Data Object Management",
+            "Dynamic Object Mapping",
+            "Document Output Module"
+        ],
+        answer: 0
+    },
+    {
+        question: "Quelle méthode JavaScript permet de sélectionner un élément HTML par son id ?",
+        options: ["querySelector()", "getElementById()", "getElement()", "selectById()"],
+        answer: 1
+    },
+    {
+        question: "En CSS, quelle valeur de 'display' permet d'utiliser le modèle de boîte flexible ?",
+        options: ["block", "inline", "flex", "grid"],
+        answer: 2
+    },
+    {
+        question: "En Git, quelle commande permet de sauvegarder les modifications dans l'historique ?",
+        options: ["git save", "git commit", "git push", "git store"],
+        answer: 1
+    },
+    {
+        question: "En JavaScript, quel bloc est utilisé pour gérer les erreurs ?",
+        options: ["if...else", "try...catch", "for...of", "switch...case"],
+        answer: 1
     }
 ];
