@@ -637,12 +637,50 @@ function createSparkles() {
 // Toggle langue FR ↔ EN
 function toggleLang() {
     currentLang = currentLang === 'fr' ? 'en' : 'fr';
+
+    // Mettre à jour le bouton langue (affiche la langue vers laquelle on peut basculer)
     const label = document.getElementById('lang-label');
     if (label) label.textContent = currentLang === 'fr' ? 'EN' : 'FR';
+
+    // Traduire tous les textes statiques de l'UI
     applyI18n();
-    // Mettre à jour le label du thème dans la nouvelle langue
+
+    // Mettre à jour le label du thème
     const themeLabel = document.getElementById('theme-label');
     if (themeLabel) themeLabel.textContent = t('themeLabels')[currentTheme];
+
+    // Si le quiz est en cours d'écran actif, recharger les questions dans la nouvelle langue
+    const quizActive = quizScreen.classList.contains('active');
+    const startActive = startScreen.classList.contains('active');
+
+    if (quizActive) {
+        // Recharger les questions dans la nouvelle langue depuis le début
+        stopTimer();
+        currentQuestionIndex = 0;
+        score = 0;
+        userAnswers = [];
+        quizStartTime = Date.now();
+        selectedQuestions = getRandomQuestions(15);
+        currentScoreElement.textContent = score;
+        totalQuestionsElement.textContent = selectedQuestions.length;
+        loadQuestion();
+    }
+
+    // Sur l'écran résultats, juste mettre à jour les textes dynamiques déjà affichés
+    const resultsActive = resultsScreen.classList.contains('active');
+    if (resultsActive) {
+        // Retraduit le message de performance en relisant le pourcentage affiché
+        const pct = parseInt(scorePercentageElement.textContent);
+        let msgKey = pct >= 90 ? 'msgExcellent' : pct >= 70 ? 'msgGood' : pct >= 50 ? 'msgAverage' : 'msgPoor';
+        performanceMessageElement.textContent = t(msgKey);
+        // Retraduit les labels de stats déjà générés dynamiquement
+        const share = shareTextElement.textContent;
+        // Reconstruit le texte de partage
+        const correct = parseInt(correctAnswersElement.textContent);
+        const total   = parseInt(totalQuestionsElement.textContent);
+        shareTextElement.textContent = `${t('shareText')} ${correct}/${total} (${pct}%) ${t('shareText2')}`;
+    }
+
     localStorage.setItem('lang', currentLang);
 }
 
