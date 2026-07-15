@@ -10,7 +10,126 @@ let quizEndTime = null;
 let selectedQuestions = [];
 let userAnswers = [];
 let isSoundEnabled = true;
-let currentTheme = 'dark';
+let currentTheme = 'dark';   // 'dark' | 'light' | 'terminal'
+let currentLang  = 'fr';     // 'fr' | 'en'
+
+// ===================================
+// INTERNATIONALISATION (i18n)
+// ===================================
+const i18n = {
+    fr: {
+        subtitle:      'Quiz sur le Code - Révision Technique',
+        welcome:       'Bienvenue !',
+        welcomeDesc:   'Testez vos connaissances en développement avec ce quiz de 20 questions.',
+        infoQuestions: '15 questions',
+        infoTimer:     '15 secondes par question',
+        infoScore:     'Score en temps réel',
+        startBtn:      'Commencer le Quiz',
+        quitBtn:       'Quitter',
+        scoreLabel:    'Score',
+        quizDone:      'Quiz Terminé !',
+        yourScore:     'Votre Score',
+        correct:       'Bonnes réponses',
+        wrong:         'Mauvaises réponses',
+        totalTime:     'Temps total',
+        restart:       'Recommencer',
+        backHome:      "Retour à l'accueil",
+        shareLabel:    'Partagez votre score !',
+        quitConfirm:   'Êtes-vous sûr de vouloir quitter le quiz ? Votre progression sera perdue.',
+        questionOf:    'Question',
+        feedbackCorrect:   'Bonne réponse !',
+        feedbackWrong:     'Mauvaise réponse !',
+        feedbackTimeout:   'Temps écoulé !',
+        msgExcellent:  'Excellent ! Vous maîtrisez parfaitement le sujet !',
+        msgGood:       'Très bien ! Vous avez de bonnes connaissances !',
+        msgAverage:    'Pas mal ! Continuez à vous entraîner !',
+        msgPoor:       'Courage ! Révisez et réessayez !',
+        shareText:     "J'ai obtenu",
+        shareText2:    'au Dev Trivia Quiz !',
+        themeLabels:   { dark: 'Dark', light: 'Light', terminal: 'Terminal' },
+    },
+    en: {
+        subtitle:      'Code Quiz - Technical Review',
+        welcome:       'Welcome!',
+        welcomeDesc:   'Test your development knowledge with this 20-question quiz.',
+        infoQuestions: '15 questions',
+        infoTimer:     '15 seconds per question',
+        infoScore:     'Real-time score',
+        startBtn:      'Start Quiz',
+        quitBtn:       'Quit',
+        scoreLabel:    'Score',
+        quizDone:      'Quiz Finished!',
+        yourScore:     'Your Score',
+        correct:       'Correct answers',
+        wrong:         'Wrong answers',
+        totalTime:     'Total time',
+        restart:       'Restart',
+        backHome:      'Back to home',
+        shareLabel:    'Share your score!',
+        quitConfirm:   'Are you sure you want to quit? Your progress will be lost.',
+        questionOf:    'Question',
+        feedbackCorrect:   'Correct answer!',
+        feedbackWrong:     'Wrong answer!',
+        feedbackTimeout:   'Time\'s up!',
+        msgExcellent:  'Excellent! You have mastered this topic!',
+        msgGood:       'Well done! You have good knowledge!',
+        msgAverage:    'Not bad! Keep practising!',
+        msgPoor:       'Keep it up! Study and try again!',
+        shareText:     'I scored',
+        shareText2:    'on Dev Trivia Quiz!',
+        themeLabels:   { dark: 'Dark', light: 'Light', terminal: 'Terminal' },
+    }
+};
+
+// Questions en anglais
+const questionsEN = [
+    { question: "Which language is mainly used to style web pages?", options: ["HTML", "CSS", "JavaScript", "Python"], answer: 1 },
+    { question: "What does HTML stand for?", options: ["Hyper Text Markup Language", "High Tech Modern Language", "Home Tool Markup Language", "Hyperlinks and Text Markup Language"], answer: 0 },
+    { question: "Which HTML tag is used to create a hyperlink?", options: ["<link>", "<a>", "<href>", "<url>"], answer: 1 },
+    { question: "In JavaScript, which method displays a message in the console?", options: ["print()", "console.log()", "alert()", "display()"], answer: 1 },
+    { question: "Which symbol is used for single-line comments in JavaScript?", options: ["//", "/* */", "#", "<!--"], answer: 0 },
+    { question: "Which CSS property changes the text color?", options: ["text-color", "font-color", "color", "text-style"], answer: 2 },
+    { question: "What does the acronym API stand for?", options: ["Application Programming Interface", "Advanced Programming Integration", "Automated Program Interaction", "Application Process Integration"], answer: 0 },
+    { question: "What is the result of '2' + 2 in JavaScript?", options: ["4", "22", "NaN", "Error"], answer: 1 },
+    { question: "Which Git command creates a local copy of a remote repository?", options: ["git copy", "git clone", "git download", "git pull"], answer: 1 },
+    { question: "In CSS, which unit is relative to the parent element's font size?", options: ["px", "em", "pt", "cm"], answer: 1 },
+    { question: "Which JavaScript keyword declares a variable that cannot be reassigned?", options: ["var", "let", "const", "static"], answer: 2 },
+    { question: "Which HTML5 tag defines a navigation section?", options: ["<navigation>", "<nav>", "<menu>", "<navbar>"], answer: 1 },
+    { question: "Which JavaScript framework was developed by Facebook?", options: ["Angular", "Vue.js", "React", "Svelte"], answer: 2 },
+    { question: "In programming, what does DRY stand for?", options: ["Don't Repeat Yourself", "Do Remember Yesterday", "Data Requires Yield", "Debug Run Yearly"], answer: 0 },
+    { question: "Which JavaScript method adds an element to the end of an array?", options: ["add()", "append()", "push()", "insert()"], answer: 2 },
+    { question: "Which protocol secures web communications?", options: ["HTTP", "HTTPS", "FTP", "SSH"], answer: 1 },
+    { question: "In CSS, which property creates space inside an element?", options: ["margin", "padding", "border", "spacing"], answer: 1 },
+    { question: "What type of database is MongoDB?", options: ["SQL", "NoSQL", "GraphQL", "NewSQL"], answer: 1 },
+    { question: "Which Git command shows the commit history?", options: ["git history", "git log", "git commits", "git show"], answer: 1 },
+    { question: "In JavaScript, which function executes code after a delay?", options: ["delay()", "wait()", "setTimeout()", "pause()"], answer: 2 },
+    { question: "Which CSS selector targets an element with id 'header'?", options: [".header", "#header", "*header", "header"], answer: 1 },
+    { question: "What does JSON stand for?", options: ["JavaScript Object Notation", "Java Standard Object Notation", "JavaScript Online Network", "Java Syntax Object Name"], answer: 0 },
+    { question: "Which HTML tag inserts an image?", options: ["<image>", "<img>", "<picture>", "<src>"], answer: 1 },
+    { question: "In JavaScript, which operator checks strict equality (value and type)?", options: ["==", "===", "=", "!="], answer: 1 },
+    { question: "What is the default port for HTTP?", options: ["443", "8080", "80", "3000"], answer: 2 },
+    { question: "Which JavaScript method removes the last element of an array?", options: ["delete()", "remove()", "pop()", "shift()"], answer: 2 },
+    { question: "In CSS, which property changes the display order of flex items?", options: ["flex-order", "order", "z-index", "position"], answer: 1 },
+    { question: "Which keyword creates a class in JavaScript ES6?", options: ["function", "class", "object", "constructor"], answer: 1 },
+    { question: "Which CSS property makes an element invisible but keeps its space?", options: ["display: none", "visibility: hidden", "opacity: 0", "hidden: true"], answer: 1 },
+    { question: "In JavaScript, which method converts an array to a string?", options: ["toString()", "join()", "concat()", "stringify()"], answer: 1 }
+];
+
+function t(key) {
+    return i18n[currentLang][key] || key;
+}
+
+function applyI18n() {
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        el.textContent = t(key);
+    });
+    document.documentElement.lang = currentLang;
+}
+
+function getActiveQuestions() {
+    return currentLang === 'en' ? questionsEN : questions;
+}
 
 // ===================================
 // ÉLÉMENTS DOM
@@ -54,7 +173,7 @@ function startQuiz() {
     userAnswers = [];
     quizStartTime = Date.now();
     
-    // Sélectionner 15 questions aléatoires
+    // Sélectionner 15 questions aléatoires dans la langue active
     selectedQuestions = getRandomQuestions(15);
     
     // Mettre à jour l'affichage
@@ -69,7 +188,7 @@ function startQuiz() {
 }
 
 function quitQuiz() {
-    if (confirm('Êtes-vous sûr de vouloir quitter le quiz ? Votre progression sera perdue.')) {
+    if (confirm(t('quitConfirm'))) {
         stopTimer();
         showScreen(startScreen);
     }
@@ -88,8 +207,8 @@ function backToHome() {
 // GESTION DES QUESTIONS
 // ===================================
 function getRandomQuestions(count) {
-    // Mélanger les questions et en prendre 'count'
-    const shuffled = [...questions].sort(() => Math.random() - 0.5);
+    const pool = getActiveQuestions();
+    const shuffled = [...pool].sort(() => Math.random() - 0.5);
     return shuffled.slice(0, count);
 }
 
@@ -106,7 +225,7 @@ function loadQuestion() {
     feedbackElement.classList.remove('correct', 'incorrect');
     
     // Mettre à jour le compteur de questions
-    questionCounter.textContent = `Question ${currentQuestionIndex + 1}/${selectedQuestions.length}`;
+    questionCounter.textContent = `${t('questionOf')} ${currentQuestionIndex + 1}/${selectedQuestions.length}`;
     
     // Mettre à jour la barre de progression
     const progress = ((currentQuestionIndex) / selectedQuestions.length) * 100;
@@ -186,11 +305,15 @@ function showFeedback(isCorrect) {
     if (isCorrect) {
         feedbackElement.classList.add('correct');
         feedbackElement.classList.remove('incorrect');
-        feedbackText.textContent = '✅ Bonne réponse !';
+        feedbackText.innerHTML = `<span class="feedback-icon feedback-icon--correct">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><polyline points="20 6 9 17 4 12"/></svg>
+        </span> ${t('feedbackCorrect')}`;
     } else {
         feedbackElement.classList.add('incorrect');
         feedbackElement.classList.remove('correct');
-        feedbackText.textContent = '❌ Mauvaise réponse !';
+        feedbackText.innerHTML = `<span class="feedback-icon feedback-icon--wrong">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </span> ${t('feedbackWrong')}`;
     }
 }
 
@@ -270,7 +393,9 @@ function handleTimeout() {
     feedbackElement.classList.remove('hidden');
     feedbackElement.classList.add('incorrect');
     feedbackElement.classList.remove('correct');
-    feedbackText.textContent = '⏰ Temps écoulé !';
+    feedbackText.innerHTML = `<span class="feedback-icon feedback-icon--timeout">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    </span> ${t('feedbackTimeout')}`;
     
     // Passer à la question suivante
     setTimeout(() => {
@@ -309,30 +434,35 @@ function endQuiz() {
     let messageClass = '';
     let icon = '';
     
+    const svgTrophy = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4a2 2 0 0 1-2-2V5h4"/><path d="M18 9h2a2 2 0 0 0 2-2V5h-4"/><path d="M12 17v4"/><path d="M8 21h8"/><path d="M6 5h12v7a6 6 0 0 1-12 0V5z"/></svg>`;
+    const svgThumb  = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>`;
+    const svgBook   = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`;
+    const svgFist   = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11.5V9a2 2 0 0 0-2-2 2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v10c0 2.21 1.79 4 4 4h4a6 6 0 0 0 6-6v-2a2 2 0 0 0-2-2z"/><path d="M14 7V5"/><path d="M10 7V5"/><path d="M6 13v-1a2 2 0 0 1 2-2"/></svg>`;
+
     if (percentage >= 90) {
-        message = '🏆 Excellent ! Vous maîtrisez parfaitement le sujet !';
+        message = t('msgExcellent');
         messageClass = 'excellent';
-        icon = '🏆';
+        icon = svgTrophy;
     } else if (percentage >= 70) {
-        message = '👍 Très bien ! Vous avez de bonnes connaissances !';
+        message = t('msgGood');
         messageClass = 'good';
-        icon = '👍';
+        icon = svgThumb;
     } else if (percentage >= 50) {
-        message = '📚 Pas mal ! Continuez à vous entraîner !';
+        message = t('msgAverage');
         messageClass = 'average';
-        icon = '📚';
+        icon = svgBook;
     } else {
-        message = '💪 Courage ! Révisez et réessayez !';
+        message = t('msgPoor');
         messageClass = 'poor';
-        icon = '💪';
+        icon = svgFist;
     }
     
     performanceMessageElement.textContent = message;
     performanceMessageElement.className = `performance-message ${messageClass}`;
-    resultsIconElement.textContent = icon;
+    resultsIconElement.innerHTML = icon;
     
     // Texte de partage
-    shareTextElement.textContent = `J'ai obtenu ${correctAnswers}/${totalQuestions} (${percentage}%) au Dev Trivia Quiz ! 💻`;
+    shareTextElement.textContent = `${t('shareText')} ${correctAnswers}/${totalQuestions} (${percentage}%) ${t('shareText2')}`;
     
     // Afficher l'écran des résultats
     showScreen(resultsScreen);
@@ -380,28 +510,59 @@ document.addEventListener('DOMContentLoaded', () => {
 // FONCTIONS THÈME & SON & EFFETS
 // ===================================
 
-// Toggle Thème Clair/Sombre
-function toggleTheme() {
-    currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    document.body.classList.toggle('light-mode');
-    
-    const themeIcon = document.querySelector('.theme-icon');
-    themeIcon.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
-    
+// Applique les icônes et classes du thème courant
+function applyThemeUI() {
+    const moon     = document.querySelector('.icon-moon');
+    const sun      = document.querySelector('.icon-sun');
+    const terminal = document.querySelector('.icon-terminal');
+    const label    = document.getElementById('theme-label');
+
+    // Reset classes body
+    document.body.classList.remove('light-mode', 'terminal-mode');
+
+    moon.style.display     = 'none';
+    sun.style.display      = 'none';
+    terminal.style.display = 'none';
+
+    if (currentTheme === 'dark') {
+        moon.style.display = 'block';
+        if (label) label.textContent = t('themeLabels').dark;
+    } else if (currentTheme === 'light') {
+        document.body.classList.add('light-mode');
+        sun.style.display = 'block';
+        if (label) label.textContent = t('themeLabels').light;
+    } else {
+        document.body.classList.add('terminal-mode');
+        terminal.style.display = 'block';
+        if (label) label.textContent = t('themeLabels').terminal;
+    }
+
     localStorage.setItem('theme', currentTheme);
+}
+
+// Cycle Dark → Light → Terminal → Dark
+function cycleTheme() {
+    const order = ['dark', 'light', 'terminal'];
+    const idx = order.indexOf(currentTheme);
+    currentTheme = order[(idx + 1) % order.length];
+    applyThemeUI();
 }
 
 // Toggle Son
 function toggleSound() {
     isSoundEnabled = !isSoundEnabled;
     const soundToggle = document.querySelector('.sound-toggle');
+    const on  = soundToggle.querySelector('.icon-sound-on');
+    const off = soundToggle.querySelector('.icon-sound-off');
     
     if (isSoundEnabled) {
         soundToggle.classList.remove('muted');
-        soundToggle.querySelector('.sound-icon').textContent = '🔊';
+        on.style.display  = 'block';
+        off.style.display = 'none';
     } else {
         soundToggle.classList.add('muted');
-        soundToggle.querySelector('.sound-icon').textContent = '🔇';
+        on.style.display  = 'none';
+        off.style.display = 'block';
     }
     
     localStorage.setItem('soundEnabled', isSoundEnabled);
@@ -473,22 +634,44 @@ function createSparkles() {
     }
 }
 
+// Toggle langue FR ↔ EN
+function toggleLang() {
+    currentLang = currentLang === 'fr' ? 'en' : 'fr';
+    const label = document.getElementById('lang-label');
+    if (label) label.textContent = currentLang === 'fr' ? 'EN' : 'FR';
+    applyI18n();
+    // Mettre à jour le label du thème dans la nouvelle langue
+    const themeLabel = document.getElementById('theme-label');
+    if (themeLabel) themeLabel.textContent = t('themeLabels')[currentTheme];
+    localStorage.setItem('lang', currentLang);
+}
+
 // Charger les préférences
 function loadPreferences() {
     const savedTheme = localStorage.getItem('theme');
     const savedSound = localStorage.getItem('soundEnabled');
-    
-    if (savedTheme === 'light') {
-        currentTheme = 'light';
-        document.body.classList.add('light-mode');
-        document.querySelector('.theme-icon').textContent = '☀️';
+    const savedLang  = localStorage.getItem('lang');
+
+    if (savedTheme && ['dark','light','terminal'].includes(savedTheme)) {
+        currentTheme = savedTheme;
     }
-    
+    applyThemeUI();
+
     if (savedSound === 'false') {
         isSoundEnabled = false;
         const soundToggle = document.querySelector('.sound-toggle');
         soundToggle.classList.add('muted');
-        soundToggle.querySelector('.sound-icon').textContent = '🔇';
+        const on  = soundToggle.querySelector('.icon-sound-on');
+        const off = soundToggle.querySelector('.icon-sound-off');
+        if (on)  on.style.display  = 'none';
+        if (off) off.style.display = 'block';
+    }
+
+    if (savedLang && ['fr','en'].includes(savedLang)) {
+        currentLang = savedLang;
+        const label = document.getElementById('lang-label');
+        if (label) label.textContent = currentLang === 'fr' ? 'EN' : 'FR';
+        applyI18n();
     }
 }
 

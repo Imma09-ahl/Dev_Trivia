@@ -12,14 +12,51 @@
     
     <!-- Contrôles en haut à droite -->
     <div class="top-controls">
-        <!-- Toggle Mode Clair/Sombre -->
-        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Changer de thème">
-            <span class="theme-icon">🌙</span>
+        <!-- Sélecteur de langue -->
+        <button class="lang-toggle" onclick="toggleLang()" id="lang-btn" aria-label="Changer de langue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+            <span id="lang-label">EN</span>
+        </button>
+
+        <!-- Cycle Thème : dark → light → terminal -->
+        <button class="theme-cycle" onclick="cycleTheme()" id="theme-cycle-btn" aria-label="Changer de thème">
+            <!-- dark (moon) -->
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+            <!-- light (sun) -->
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+                <circle cx="12" cy="12" r="5"/>
+                <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+            <!-- terminal (>_) -->
+            <svg class="icon-terminal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+                <polyline points="4 17 10 11 4 5"/>
+                <line x1="12" y1="19" x2="20" y2="19"/>
+            </svg>
+            <span class="theme-cycle-label" id="theme-label">Dark</span>
         </button>
         
         <!-- Toggle Son -->
         <button class="sound-toggle" onclick="toggleSound()" aria-label="Activer/Désactiver le son">
-            <span class="sound-icon">🔊</span>
+            <span class="sound-icon">
+                <svg class="icon-sound-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                </svg>
+                <svg class="icon-sound-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                    <line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>
+                </svg>
+            </span>
         </button>
     </div>
 
@@ -27,41 +64,65 @@
     <div id="start-screen" class="screen active">
         <div class="container">
             <header class="quiz-header">
-                <div class="logo">💻</div>
+                <div class="logo">
+                    <svg class="logo-svg" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="4" y="10" width="56" height="36" rx="4" stroke="currentColor" stroke-width="3" fill="none"/>
+                        <line x1="4" y1="38" x2="60" y2="38" stroke="currentColor" stroke-width="3"/>
+                        <line x1="20" y1="54" x2="44" y2="54" stroke="currentColor" stroke-width="3"/>
+                        <line x1="32" y1="46" x2="32" y2="54" stroke="currentColor" stroke-width="3"/>
+                        <polyline points="18,30 26,22 18,14" stroke="var(--primary-light)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                        <line x1="30" y1="30" x2="42" y2="30" stroke="var(--primary-light)" stroke-width="3" stroke-linecap="round"/>
+                    </svg>
+                </div>
                 <h1>Dev Trivia</h1>
-                <p class="subtitle">Quiz sur le Code - Révision Technique</p>
+                <p class="subtitle" data-i18n="subtitle">Quiz sur le Code - Révision Technique</p>
             </header>
 
             <div class="welcome-content">
                 <div class="info-card">
-                    <h2>Bienvenue !</h2>
-                    <p>Testez vos connaissances en développement avec ce quiz de 20 questions.</p>
+                    <h2 data-i18n="welcome">Bienvenue !</h2>
+                    <p data-i18n="welcomeDesc">Testez vos connaissances en développement avec ce quiz de 20 questions.</p>
                     
                     <div class="quiz-info">
                         <div class="info-item">
-                            <span class="info-icon">📝</span>
-                            <span>20 questions</span>
+                            <span class="info-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                    <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+                                    <polyline points="10 9 9 9 8 9"/>
+                                </svg>
+                            </span>
+                            <span data-i18n="infoQuestions">15 questions</span>
                         </div>
                         <div class="info-item">
-                            <span class="info-icon">⏱️</span>
-                            <span>15 secondes par question</span>
+                            <span class="info-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <polyline points="12 6 12 12 16 14"/>
+                                </svg>
+                            </span>
+                            <span data-i18n="infoTimer">15 secondes par question</span>
                         </div>
                         <div class="info-item">
-                            <span class="info-icon">🎯</span>
-                            <span>Score en temps réel</span>
+                            <span class="info-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="12" y1="8" x2="12" y2="12"/>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                                </svg>
+                            </span>
+                            <span data-i18n="infoScore">Score en temps réel</span>
                         </div>
                     </div>
 
-                    <button class="btn btn-primary btn-large" onclick="startQuiz()">
+                    <button class="btn btn-primary btn-large" onclick="startQuiz()" data-i18n="startBtn">
                         Commencer le Quiz
                     </button>
                 </div>
             </div>
 
-            <footer class="start-footer">
-                <p>Projet de vacances L1 - Juillet 2026</p>
-                <p>Encadrant : Duvalier (Drakenarf)</p>
-            </footer>
+            
         </div>
     </div>
 
@@ -69,8 +130,16 @@
     <div id="quiz-screen" class="screen">
         <div class="container">
             <div class="quiz-header-bar">
-                <div class="theme-badge">💻 Dev Trivia</div>
-                <button class="btn btn-secondary btn-small" onclick="quitQuiz()">Quitter</button>
+                <div class="theme-badge">
+                    <svg class="badge-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="1" y="3" width="18" height="12" rx="2"/>
+                        <line x1="1" y1="11" x2="19" y2="11"/>
+                        <line x1="6" y1="19" x2="14" y2="19"/>
+                        <line x1="10" y1="15" x2="10" y2="19"/>
+                    </svg>
+                    Dev Trivia
+                </div>
+                <button class="btn btn-secondary btn-small" onclick="quitQuiz()" data-i18n="quitBtn">Quitter</button>
             </div>
 
             <!-- Barre de progression -->
@@ -105,7 +174,7 @@
 
             <!-- Score actuel -->
             <div class="current-score">
-                <span>Score : <strong id="current-score">0</strong> / <span id="total-questions">15</span></span>
+                <span><span data-i18n="scoreLabel">Score</span> : <strong id="current-score">0</strong> / <span id="total-questions">15</span></span>
             </div>
         </div>
     </div>
@@ -115,14 +184,24 @@
         <div class="container">
             <div class="results-container">
                 <div class="results-header">
-                    <div class="results-icon" id="results-icon">🎉</div>
-                    <h1>Quiz Terminé !</h1>
-                    <div class="theme-badge">💻 Dev Trivia</div>
+                    <div class="results-icon" id="results-icon">
+                        <!-- filled dynamically by JS with SVG -->
+                    </div>
+                    <h1 data-i18n="quizDone">Quiz Terminé !</h1>
+                    <div class="theme-badge">
+                        <svg class="badge-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="1" y="3" width="18" height="12" rx="2"/>
+                            <line x1="1" y1="11" x2="19" y2="11"/>
+                            <line x1="6" y1="19" x2="14" y2="19"/>
+                            <line x1="10" y1="15" x2="10" y2="19"/>
+                        </svg>
+                        Dev Trivia
+                    </div>
                 </div>
 
                 <div class="score-display">
                     <div class="final-score">
-                        <span class="score-label">Votre Score</span>
+                        <span class="score-label" data-i18n="yourScore">Votre Score</span>
                         <span class="score-value" id="final-score">0/15</span>
                         <span class="score-percentage" id="score-percentage">0%</span>
                     </div>
@@ -132,33 +211,54 @@
 
                 <div class="results-stats">
                     <div class="stat-item">
-                        <span class="stat-icon">✅</span>
-                        <span class="stat-label">Bonnes réponses</span>
+                        <span class="stat-icon stat-correct">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="stat-label" data-i18n="correct">Bonnes réponses</span>
                         <span class="stat-value" id="correct-answers">0</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-icon">❌</span>
-                        <span class="stat-label">Mauvaises réponses</span>
+                        <span class="stat-icon stat-wrong">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </span>
+                        <span class="stat-label" data-i18n="wrong">Mauvaises réponses</span>
                         <span class="stat-value" id="wrong-answers">0</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-icon">⏱️</span>
-                        <span class="stat-label">Temps total</span>
+                        <span class="stat-icon stat-time">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                        </span>
+                        <span class="stat-label" data-i18n="totalTime">Temps total</span>
                         <span class="stat-value" id="total-time">0s</span>
                     </div>
                 </div>
 
                 <div class="results-actions">
                     <button class="btn btn-primary" onclick="restartQuiz()">
-                        🔄 Recommencer
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+                            <polyline points="1 4 1 10 7 10"/>
+                            <path d="M3.51 15a9 9 0 1 0 .49-3.5"/>
+                        </svg>
+                        <span data-i18n="restart">Recommencer</span>
                     </button>
                     <button class="btn btn-secondary" onclick="backToHome()">
-                        🏠 Retour à l'accueil
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                            <polyline points="9 22 9 12 15 12 15 22"/>
+                        </svg>
+                        <span data-i18n="backHome">Retour à l'accueil</span>
                     </button>
                 </div>
 
                 <div class="share-section">
-                    <p>Partagez votre score !</p>
+                    <p data-i18n="shareLabel">Partagez votre score !</p>
                     <div class="share-text" id="share-text"></div>
                 </div>
             </div>
